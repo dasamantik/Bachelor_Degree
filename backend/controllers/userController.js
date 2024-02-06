@@ -9,7 +9,7 @@ export const register = async (reg, res) => {
     if (!errors.isEmpty()) return res.status(400).json(errors.array());
 
     const { email, name, phone, password } = reg.body;
-    const InUse = await User.findOne({ email });
+    const InUse = await User.findOne({ email }, { _id: true }.lean());
     if (InUse) return res.status(400).json({ message: "Email already exist" });
 
     const salt = await bcrypt.genSalt(10);
