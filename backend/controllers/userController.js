@@ -1,85 +1,79 @@
 import bcrypt from "bcryptjs";
-import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { loginSchema, registerSchema } from "../validations/userValidation.js";
 
-export const register = async (reg, res) => {
+export const register = async (req, res) => {
   try {
-    const errors = validationResult(reg.body);
-    if (!errors.isEmpty()) return res.status(400).json(errors.array());
+    const { error } = registerSchema.validate(req.body);
+    if (error)
+      return res
+        .status(400)
+        .json({ message: "Помилка валідації: " + error.details[0].message });
 
-    const { email, name, phone, password } = reg.body;
-    const InUse = await User.findOne({ email }, { _id: true }.lean());
-    if (InUse) return res.status(400).json({ message: "Email already exist" });
+    const { email, name, phone, password } = req.body;
+    const InUse = await User.findOne({ email }, { _id: true });
+    if (InUse)
+      return res
+        .status(400)
+        .json({ message: "Електронна адресса вже зареєстрована " });
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const doc = new User({
+    const newUser = new User({
       email,
       passwordHash,
       phone,
       name,
     });
 
-    const user = await doc.save();
+    const user = await newUser.save();
 
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      "secret123",
-      {
-        expiresIn: "30d",
-      }
-    );
-    res.json({
-      ...user._doc,
-      token,
+    const token = jwt.sign({ _id: user._id }, "secret123", {
+      expiresIn: "30d",
     });
+
+    res.json({ ...user._doc, token });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: "Не вдалося зареєструватися",
-    });
+    res.status(500).json({ message: "Неможливо зареєструвати" });
   }
 };
 
-export const login = async (reg, res) => {
+export const login = async (req, res) => {
   try {
-    const user = await User.findOne({ email: reg.body.email });
+    const { error } = loginSchema.validate(req.body);
+    if (error)
+      return res
+        .status(400)
+        .json({ message: "Помилка валідації: " + error.details[0].message });
+
+    const user = await User.findOne({ email: req.body.email });
     if (!user)
       return res
         .status(400)
-        .json({ message: "Перевірте чи коректно введені данні" });
-    const IsPasswordCor = await bcrypt.compare(
-      reg.body.password,
-      user._doc.passwordHash
-    );
-    if (!IsPasswordCor)
-      res.status(400).json({ message: "Перевірте чи коректно введені данні" });
+        .json({ message: "Перевірте введені данні або зареєструйтеся." });
 
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      "secret123",
-      {
-        expiresIn: "30d",
-      }
+    const isPasswordCorrect = await bcrypt.compare(
+      req.body.password,
+      user.passwordHash
     );
-    res
-      .cookie("access_token", token, {
-        httpOnly: false,
-      })
-      .status(200)
-      .json({
-        message: "OK",
-      });
-  } catch (err) {
-    res.status(500).json({
-      message: "Не вдалося увійти",
+    if (!isPasswordCorrect)
+      return res
+        .status(400)
+        .json({ message: "Перевірте введені данні або зареєструйтеся." });
+
+    const token = jwt.sign({ _id: user._id }, "secret123", {
+      expiresIn: "30d",
     });
+
+    res
+      .cookie("access_token", token, { httpOnly: false })
+      .status(200)
+      .json({ message: "OK" });
+  } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Неможливо увійти" });
   }
 };
