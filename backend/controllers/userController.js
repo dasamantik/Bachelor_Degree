@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
+import UserDto from "../DateTransferObj/userDTO.js";
 import User from "../models/userModel.js";
+import * as Mail from "../service/mail-service.js";
+import * as Token from "../service/token-service.js";
 import { loginSchema, registerSchema } from "../validations/userValidation.js";
-
 export const register = async (req, res) => {
   try {
     const { error } = registerSchema.validate(req.body);
@@ -20,21 +22,25 @@ export const register = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
-
+    const activationLink = uuidv4();
     const newUser = new User({
       email,
       passwordHash,
       phone,
       name,
+      activationLink,
     });
 
-    const user = await newUser.save();
-
-    const token = jwt.sign({ _id: user._id }, "secret123", {
-      expiresIn: "30d",
+    const user = await User.create(newUser);
+    await Mail.sendActivationMail(email, activationLink);
+    const userDto = new UserDto(user);
+    const tokens = Token.generateTokens({ ...userDto });
+    await Token.saveToken(userDto.id, tokens.refreshToken);
+    res.cookie("refreshToken", tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
     });
-
-    res.json({ ...user._doc, token });
+    res.json({ ...user._doc, ...tokens });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Неможливо зареєструвати" });
@@ -64,12 +70,8 @@ export const login = async (req, res) => {
         .status(400)
         .json({ message: "Перевірте введені данні або зареєструйтеся." });
 
-    const token = jwt.sign({ _id: user._id }, "secret123", {
-      expiresIn: "30d",
-    });
-
     res
-      .cookie("access_token", token, { httpOnly: false })
+      .cookie("access_token", { httpOnly: false })
       .status(200)
       .json({ message: "OK" });
   } catch (err) {
