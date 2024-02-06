@@ -8,12 +8,10 @@ export const register = async (reg, res) => {
     const errors = validationResult(reg.body);
     if (!errors.isEmpty()) return res.status(400).json(errors.array());
 
-    const email = reg.body.email;
-    const name = reg.body.name;
-    const phone = reg.body.phone;
+    const { email, name, phone, password } = reg.body;
     const InUse = await User.findOne({ email });
     if (InUse) return res.status(400).json({ message: "Email already exist" });
-    const password = reg.body.password;
+
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
