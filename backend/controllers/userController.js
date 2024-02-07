@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import UserDto from "../DateTransferObj/userDTO.js";
 import User from "../models/userModel.js";
-import * as Mail from "../service/mail-service.js";
+import MailService from "../service/mail-service.js";
 import * as Token from "../service/token-service.js";
 import { loginSchema, registerSchema } from "../validations/userValidation.js";
 export const register = async (req, res) => {
@@ -32,7 +32,11 @@ export const register = async (req, res) => {
     });
 
     const user = await User.create(newUser);
-    await Mail.sendActivationMail(email, activationLink);
+    const mailService = new MailService();
+    await mailService.sendActivationMail(
+      email,
+      `${process.env.API_URL}/api/activate/${activationLink}`
+    );
     const userDto = new UserDto(user);
     const tokens = Token.generateTokens({ ...userDto });
     await Token.saveToken(userDto.id, tokens.refreshToken);
