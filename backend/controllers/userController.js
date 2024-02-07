@@ -5,6 +5,7 @@ import User from "../models/userModel.js";
 import MailService from "../service/mail-service.js";
 import * as Token from "../service/token-service.js";
 import { loginSchema, registerSchema } from "../validations/userValidation.js";
+
 export const register = async (req, res) => {
   try {
     const { error } = registerSchema.validate(req.body);
@@ -81,5 +82,21 @@ export const login = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Неможливо увійти" });
+  }
+};
+
+export const activateAccount = async (req, res, next) => {
+  try {
+    const activationLink = req.params.link;
+    const user = await User.findOne({ activationLink });
+    if (!user) {
+      throw new Error("Некоректне посиляння");
+    }
+    user.isActivated = true;
+    await user.save();
+    return res.redirect(process.env.CLIENT_URL);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Неможливо підтвердити" });
   }
 };
