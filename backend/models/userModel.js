@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
@@ -18,6 +17,13 @@ const userSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: true,
+  },
+  isActivated: {
+    type: Boolean,
+    default: false,
+  },
+  activationLink: {
+    type: String,
   },
 });
 export default mongoose.model("User", userSchema);
