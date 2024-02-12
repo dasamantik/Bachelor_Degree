@@ -1,6 +1,12 @@
+import React, { useState } from "react";
+import { register } from "../../service/authService";
 import "./login-register.css";
 
 function RegisterP() {
+  const [name, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   return (
     <div className="App">
       <div className="container">
@@ -10,6 +16,8 @@ function RegisterP() {
             Ім'я користувача:
           </label>
           <input
+            value={name}
+            onChange={(e) => setUsername(e.target.value)}
             className="input-style"
             type="text"
             id="username"
@@ -19,6 +27,8 @@ function RegisterP() {
             Номер телефону:
           </label>
           <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="input-style"
             type="text"
             id="username"
@@ -28,6 +38,8 @@ function RegisterP() {
             Електронна адреса:
           </label>
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="input-style"
             type="text"
             id="username"
@@ -37,21 +49,18 @@ function RegisterP() {
             Пароль:
           </label>
           <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="input-style"
             type="password"
             id="password"
             name="password"
           />
-          <label className="label-style" htmlFor="username">
-            Повторити пароль:
-          </label>
-          <input
-            className="input-style"
-            type="text"
-            id="username"
-            name="username"
-          />
-          <button className="button-style" type="submit">
+          <button
+            className="button-style"
+            type="submit"
+            onClick={() => register(name, phone, email, password)}
+          >
             Створити акаунту
           </button>
         </form>

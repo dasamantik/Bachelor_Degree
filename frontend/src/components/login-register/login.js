@@ -1,6 +1,10 @@
+import React, { useState } from "react";
+import { login } from "../../service/authService";
 import "./login-register.css";
-
 function LoginP() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="App">
       <div className="container">
@@ -10,6 +14,8 @@ function LoginP() {
             Електронна адреса:
           </label>
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="input-style"
             type="text"
             id="username"
@@ -19,12 +25,18 @@ function LoginP() {
             Пароль:
           </label>
           <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="input-style"
             type="password"
             id="password"
             name="password"
           />
-          <button className="button-style" type="submit">
+          <button
+            className="button-style"
+            type="submit"
+            onClick={() => login(email, password)}
+          >
             Увійти
           </button>
         </form>

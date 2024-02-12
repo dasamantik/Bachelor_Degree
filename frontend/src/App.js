@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import LoginP from "./login";
-import RegisterP from "./register";
+import LoginP from "./components/login-register/login";
+import RegisterP from "./components/login-register/register";
 
 function App() {
   return (
