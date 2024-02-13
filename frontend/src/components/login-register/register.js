@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { register } from "../../service/authService";
+import AuthService from "../../service/authService";
 import "./login-register.css";
 
 function RegisterP() {
+  const authService = new AuthService();
   const [name, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -31,8 +32,8 @@ function RegisterP() {
             onChange={(e) => setPhone(e.target.value)}
             className="input-style"
             type="text"
-            id="username"
-            name="username"
+            id="phone"
+            name="phone"
           />
           <label className="label-style" htmlFor="username">
             Електронна адреса:
@@ -42,8 +43,8 @@ function RegisterP() {
             onChange={(e) => setEmail(e.target.value)}
             className="input-style"
             type="text"
-            id="username"
-            name="username"
+            id="email"
+            name="email"
           />
           <label className="label-style" htmlFor="password">
             Пароль:
@@ -58,8 +59,8 @@ function RegisterP() {
           />
           <button
             className="button-style"
-            type="submit"
-            onClick={() => register(name, phone, email, password)}
+            type="button"
+            onClick={() => authService.register(name, phone, email, password)}
           >
             Створити акаунту
           </button>

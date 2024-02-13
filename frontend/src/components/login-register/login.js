@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { login } from "../../service/authService";
+import AuthService from "../../service/authService";
 import "./login-register.css";
 function LoginP() {
+  const authService = new AuthService();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -34,8 +35,8 @@ function LoginP() {
           />
           <button
             className="button-style"
-            type="submit"
-            onClick={() => login(email, password)}
+            type="button"
+            onClick={() => authService.login(email, password)}
           >
             Увійти
           </button>
