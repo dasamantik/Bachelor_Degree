@@ -1,7 +1,4 @@
-//import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
-//dotenv.config();
-const test = process.env.SMTP_HOST;
 export default class MailService {
   constructor() {
     this.transporter = nodemailer.createTransport({

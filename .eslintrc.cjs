@@ -12,6 +12,12 @@ module.exports = {
     semi: ['error', 'always'],
     quotes: ['error', 'single'],
     indent: ['error', 2],
+    prettier/prettier: [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'no-console': 'off',
     'prettier/prettier': ['error'],
     'no-unused-vars': [
