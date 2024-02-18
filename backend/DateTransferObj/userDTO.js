@@ -4,8 +4,6 @@ export default class UserDto {
   isActivated;
 
   constructor(model) {
-    (this.email = model.email),
-      (this.id = model._id),
-      (this.isActivated = model.isActive);
+    (this.email = model.email), (this.id = model._id), (this.isActivated = model.isActive);
   }
 }

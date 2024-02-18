@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-import nodemailer from "nodemailer";
-dotenv.config();
-
+//import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
+//dotenv.config();
+const test = process.env.SMTP_HOST;
 export default class MailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
@@ -19,8 +19,8 @@ export default class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: "Account Activation on " + process.env.API_URL,
-      text: "",
+      subject: `Account Activation on ${process.env.API_URL}`,
+      text: '',
       html: `
         <div>
         <h1>Для активації акаунту перейдіть за посиланям</h1>
