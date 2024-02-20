@@ -1,6 +1,6 @@
-import axios from "axios";
-import { boolean, string } from "joi";
-import authApi from "../api/authApi";
+import axios from 'axios';
+import { boolean, string } from 'joi';
+import authApi from '../api/authApi';
 export default class AuthService {
   user = {
     email: string,
@@ -29,18 +29,14 @@ export default class AuthService {
   }
   async register(username, phone, email, password) {
     try {
-      const response = await authApi.registerApi(
-        username,
-        phone,
-        email,
-        password
-      );
+      console.log(email);
+      const response = await authApi.registerApi(username, phone, email, password);
       console.log(response);
       localStorage.setItem(`token`, response.data.accessToken);
       this.isAuth = true;
       this.user = response.data.user;
     } catch (err) {
-      console.log(err.response?.data?.message);
+      console.log(err);
     }
   }
 
@@ -48,7 +44,7 @@ export default class AuthService {
     try {
       const response = await authApi.logOutApi();
       console.log(response);
-      localStorage.removeItem("token", response.data.accessToken);
+      localStorage.removeItem('token', response.data.accessToken);
       this.setAuth(false);
       this.setUser({ email: string, isActivated: boolean, id: string });
     } catch (err) {
@@ -58,7 +54,7 @@ export default class AuthService {
 
   async checkAuth() {
     try {
-      const response = await axios.get("http://localhost:3002/api/refresh", {
+      const response = await axios.get('http://localhost:3002/api/refresh', {
         withCredentials: true,
       });
       this.isAuth = true;

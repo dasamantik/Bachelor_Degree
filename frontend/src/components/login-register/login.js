@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import AuthService from "../../service/authService";
-import "./login-register.css";
+import React, { useState } from 'react';
+import AuthService from '../../service/authService';
+import './login-register.css';
 function LoginP() {
   const authService = new AuthService();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <div className="App">
@@ -33,16 +33,12 @@ function LoginP() {
             id="password"
             name="password"
           />
-          <button
-            className="button-style"
-            type="button"
-            onClick={() => authService.login(email, password)}
-          >
+          <button className="button-style" type="button" onClick={() => authService.login(email, password)}>
             Увійти
           </button>
         </form>
         <p className="label-style">
-          Не маєте акаунту?{" "}
+          Не маєте акаунту?{' '}
           <a className="link-style" href="/register">
             Зареєструвати
           </a>
