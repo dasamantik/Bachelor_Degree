@@ -1,9 +1,12 @@
-import AppiError from '../exceptions/appi-errors.js';
+import AppiError from "../exceptions/appi-errors.js";
 
-export default (err, _, res) => {
-  console.log(123);
-  if (err instanceof AppiError) {
-    return res.status(err.status).json({ message: err.message, errors: err.errors });
+const errorHandlerMiddleware = (error, _, reply) => {
+  if (error instanceof AppiError) {
+    reply
+      .code(error.status)
+      .send({ message: error.message, errors: error.errors });
   }
-  return res.status(500).json({ message: 'Щось пішло не так' });
+  reply.status(500).send({ message: "Щось пішло не так" });
 };
+
+export default errorHandlerMiddleware;

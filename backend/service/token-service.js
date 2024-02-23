@@ -1,15 +1,12 @@
-//import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
-import tokenModel from '../models/tokenModel.js';
-
-//dotenv.config();
+import jwt from "jsonwebtoken";
+import tokenModel from "../models/tokenModel.js";
 
 export const generateTokens = (payload) => {
   const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: '30m',
+    expiresIn: "30m",
   });
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: '30d',
+    expiresIn: "30d",
   });
   return {
     accessToken,

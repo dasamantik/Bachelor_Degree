@@ -1,12 +1,12 @@
-import express from 'express';
-import * as User from '../controllers/userController.js';
-import authMiddleware from '../middlewares/auth-middleware.js';
-const router = express.Router();
+import * as UserController from "../controllers/userController.js";
+import authMiddleware from "../middlewares/auth-middleware.js";
 
-router.post('/register', User.register);
-router.post('/login', User.login);
-router.post('/logout', User.logout);
-router.get('/activate/:link', User.activateAccount);
-router.get('/refresh', User.refreshToken);
-router.get('/Test', authMiddleware, User.Test);
-export default router;
+async function routes(fastify) {
+  fastify.post("/register", UserController.register);
+  fastify.post("/login", UserController.login);
+  fastify.post("/logout", UserController.logout);
+  fastify.get("/activate/:link", UserController.activateAccount);
+  fastify.get("/refresh", UserController.refreshToken);
+  fastify.get("/Test", { preHandler: authMiddleware }, UserController.Test);
+}
+export default routes;

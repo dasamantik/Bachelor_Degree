@@ -1,74 +1,86 @@
-import * as UserService from '../service/user-service.js';
-import { loginSchema, registerSchema } from '../validations/userValidation.js';
-export const register = async (req, res, next) => {
-  try {
-    const { error } = registerSchema.validate(req.body);
-    if (error) return res.status(400).json({ message: `Помилка валідації: ${error.details[0].message}` });
+import * as UserService from "../service/user-service.js";
+import { loginSchema, registerSchema } from "../validations/userValidation.js";
 
-    const { email, name, phone, password } = req.body;
-    const userData = await UserService.registerUser(email, name, phone, password);
-    res.cookie('refreshToken', userData.refreshToken, {
+export const register = async (request, reply) => {
+  try {
+    const { error } = registerSchema.validate(request.body);
+    if (error)
+      return reply
+        .status(400)
+        .send({ message: `Помилка валідації: ${error.details[0].message}` });
+
+    const { email, name, phone, password } = request.body;
+    const userData = await UserService.registerUser(
+      email,
+      name,
+      phone,
+      password
+    );
+    reply.cookie("refreshToken", userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-    res.json(userData);
+    reply.status(200).send({ data: userData });
   } catch (err) {
-    next(err);
+    reply.send(err);
   }
 };
 
-export const login = async (req, res, next) => {
+export const login = async (request, reply) => {
   try {
-    const { error } = loginSchema.validate(req.body);
-    if (error) return res.status(400).json({ message: `Помилка валідації: ${error.details[0].message}` });
-    const { email, password } = req.body;
+    const { error } = loginSchema.validate(request.body);
+    if (error)
+      return reply
+        .status(400)
+        .json({ message: `Помилка валідації: ${error.details[0].message}` });
+    const { email, password } = request.body;
     const userData = await UserService.loginUser(email, password);
-    res.cookie('refreshToken', userData.refreshToken, {
+    reply.cookie("refreshToken", userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-    res.json(userData);
+    reply.send(userData);
   } catch (err) {
-    next(err);
+    reply.send(err);
   }
 };
 
-export const activateAccount = async (req, res, next) => {
+export const activateAccount = async (request, reply) => {
   try {
-    const activationLink = req.params.link;
+    const activationLink = request.params.link;
     await UserService.activateAccount(activationLink);
-    return res.redirect(process.env.CLIENT_URL);
+    return reply.redirect(process.env.CLIENT_URL);
   } catch (err) {
-    next(err);
+    reply.send(err);
   }
 };
 
-export const logout = async (req, res, next) => {
+export const logout = async (request, reply) => {
   try {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = request.cookies;
     const token = await UserService.logOut(refreshToken);
     console.log(token);
-    res.clearCookie('refreshToken');
-    return res.status(200).json({ message: 'OK' });
+    reply.clearCookie("refreshToken");
+    return reply.status(200).send({ message: "OK" });
   } catch (err) {
-    next(err);
+    reply.send(err);
   }
 };
 
-export const refreshToken = async (req, res, next) => {
+export const refreshToken = async (request, reply) => {
   try {
-    const { refreshToken: _refreshToken } = req.cookies;
+    const { refreshToken: _refreshToken } = request.cookies;
     const userData = await UserService.refresh(_refreshToken);
-    res.cookie('refreshToken', userData.refreshToken, {
+    reply.cookie("refreshToken", userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-    res.json(userData);
+    reply.send(userData);
   } catch (err) {
-    next(err);
+    reply.send(err);
   }
 };
 
-export const Test = async (_, res) => {
-  res.json({ message: 'Ok' });
+export const Test = async (_, reply) => {
+  reply.send({ message: "Ok" });
 };
