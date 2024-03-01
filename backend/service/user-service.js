@@ -35,7 +35,7 @@ export const registerUser = async (email, phone, name, password) => {
   const mailService = new MailService();
   await mailService.sendActivationMail(
     email,
-    `${process.env.API_URL}/api/activate/${activationLink}`
+    `${process.env.API_URL}/activate/${activationLink}`
   );
   const data = generateTokensPair(user);
   return data;
