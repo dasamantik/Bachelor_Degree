@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AuthService from '../../service/authService';
-import './login-register.css';
+
 function LoginP() {
   const authService = new AuthService();
   const [email, setEmail] = useState('');
