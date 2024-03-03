@@ -1,0 +1,14 @@
+import { Schema, model as _model } from "mongoose";
+
+const monitorSchema = new Schema({
+  brand: { type: String, required: true },
+  model: { type: String, required: true },
+  screenSize: { type: Number, required: true },
+  resolution: { type: String, required: true },
+  refreshRate: { type: Number, required: true },
+  price: { type: Number, required: true },
+});
+
+const Monitor = _model("Monitor", monitorSchema);
+
+export default Monitor;
