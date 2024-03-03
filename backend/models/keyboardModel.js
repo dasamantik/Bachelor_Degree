@@ -6,7 +6,7 @@ const keyboardSchema = new Schema({
   type: { type: String, required: true },
   connectivity: { type: String, required: true },
   backlight: { type: Boolean, default: false },
-  price: { type: Number, required: true },
+  price: { type: String, required: true },
 });
 
 const Keyboard = _model("Keyboard", keyboardSchema);

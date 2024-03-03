@@ -6,7 +6,7 @@ const monitorSchema = new Schema({
   screenSize: { type: Number, required: true },
   resolution: { type: String, required: true },
   refreshRate: { type: Number, required: true },
-  price: { type: Number, required: true },
+  price: { type: String, required: true },
 });
 
 const Monitor = _model("Monitor", monitorSchema);

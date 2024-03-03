@@ -14,7 +14,7 @@ const caseSchema = new Schema({
     },
   ],
   ledLighting: { type: Boolean, default: false },
-  price: { type: Number, required: true },
+  price: { type: String, required: true },
 });
 
 const Case = _model("Case", caseSchema);

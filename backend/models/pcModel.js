@@ -45,7 +45,7 @@ const pcBuildSchema = new mongoose.Schema({
     ref: "NetworkInterfaceCard",
     required: false,
   },
-  totalPrice: { type: Number, required: true },
+  price: { type: String, required: true },
 });
 
 export default mongoose.model("PcBuild", pcBuildSchema);
