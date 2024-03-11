@@ -1,6 +1,7 @@
 import { Schema, model as _model, mongoose } from "mongoose";
 
 const gpuSchema = new Schema({
+  photo: { type: String, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   memory: { type: Number, required: true },

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const soundCardSchema = new mongoose.Schema({
+  photo: { type: String, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   interfaceType: { type: String, required: true },

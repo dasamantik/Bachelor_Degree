@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const pcBuildSchema = new mongoose.Schema({
+  photo: { type: String, required: true },
   cpu: { type: mongoose.Schema.Types.ObjectId, ref: "CPU", required: true },
   motherboard: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 import { Schema, model as _model } from "mongoose";
 
 const monitorSchema = new Schema({
+  photo: { type: String, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   screenSize: { type: Number, required: true },

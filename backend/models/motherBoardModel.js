@@ -1,6 +1,7 @@
 import { Schema, model as _model, mongoose } from "mongoose";
 
 const motherboardSchema = new Schema({
+  photo: { type: String, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   socket: { type: String, required: true },
