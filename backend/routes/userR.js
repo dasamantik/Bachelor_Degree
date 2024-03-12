@@ -1,4 +1,3 @@
-import * as AdminController from "../controllers/adminController.js";
 import * as UserController from "../controllers/userController.js";
 import * as authMiddleware from "../middlewares/auth-middleware.js";
 async function routes(fastify) {
@@ -16,12 +15,6 @@ async function routes(fastify) {
     "/VerifyAdmin",
     { preHandler: authMiddleware.VerifyAdmin },
     UserController.Test
-  );
-
-  fastify.get(
-    "/admin/users",
-    { preHandler: authMiddleware.VerifyAdmin },
-    AdminController.getUsers
   );
 }
 export default routes;

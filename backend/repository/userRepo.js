@@ -1,14 +1,15 @@
+import Token from "../models/tokenModel.js";
 import User from "../models/userModel.js";
-class UserRepository {
-  async findByParam(Param) {
-    return await User.findOne({ Param }, { _id: true });
-  }
+const UserRepository = {
+  findByEmail: async (email) => {
+    return await User.findOne({ email });
+  },
 
-  async findById(id) {
+  findById: async (id) => {
     return await User.findById(id);
-  }
+  },
 
-  async create(email, passwordHash, phone, name, activationLink) {
+  create: async (email, passwordHash, phone, name, activationLink) => {
     const user = {
       email,
       passwordHash,
@@ -17,15 +18,20 @@ class UserRepository {
       activationLink,
     };
     return await User.create(user);
-  }
+  },
 
-  async update(id, data) {
+  update: async (id, data) => {
     return await User.findByIdAndUpdate(id, data, { new: true });
-  }
+  },
 
-  async delete(id) {
+  delete: async (id) => {
+    await Token.deleteMany({ user: id });
     return await User.findByIdAndDelete(id);
-  }
-}
+  },
+
+  getAll: async () => {
+    return await User.find();
+  },
+};
 
 export default UserRepository;

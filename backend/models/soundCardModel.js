@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const soundCardSchema = new mongoose.Schema({
   photo: { type: String, required: true },
@@ -27,4 +27,4 @@ const soundCardSchema = new mongoose.Schema({
 
 const SoundCard = mongoose.model("SoundCard", soundCardSchema);
 
-module.exports = SoundCard;
+export default SoundCard;

@@ -4,7 +4,7 @@ import express from "@fastify/express";
 import dotenv from "dotenv";
 import fastify from "fastify";
 import mongoose from "mongoose";
-//import errorHandler from "./backend/middlewares/error-middleware.js";
+import adminRoute from "./backend/routes/adminR.js";
 import userRoute from "./backend/routes/userR.js";
 
 dotenv.config();
@@ -23,6 +23,7 @@ app.register(cors, { credentials: true, origin: process.env.CLIENT_URL });
 const PORT = process.env.PORT || 3000;
 
 app.register(userRoute, { prefix: "/api" });
+app.register(adminRoute, { prefix: "/api/admin" });
 
 app.listen({ port: PORT }, function (err, address) {
   if (err) {
@@ -31,4 +32,3 @@ app.listen({ port: PORT }, function (err, address) {
   }
   console.log(`Server running on port ${address}`);
 });
-//app.register(errorHandler);

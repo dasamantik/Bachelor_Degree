@@ -2,11 +2,9 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import UserDto from "../DateTransferObj/userDTO.js";
 import AppiError from "../exceptions/appi-errors.js";
-import UserRepository from "../repository/userRepo.js";
+import userRepository from "../repository/userRepo.js";
 import MailService from "../service/mail-service.js";
 import * as Token from "../service/token-service.js";
-
-const userRepository = new UserRepository();
 
 const generateTokensPair = async (user) => {
   const userDTO = new UserDto(user);
@@ -16,8 +14,7 @@ const generateTokensPair = async (user) => {
 };
 
 export const registerUser = async (email, phone, name, password) => {
-  const InUse = await userRepository.findByParam(email);
-  console.log(InUse);
+  const InUse = await userRepository.findByEmail(email);
   if (InUse) {
     throw AppiError.BadRequest(
       `Електронна адреса ${email} вже використовується`
@@ -43,7 +40,7 @@ export const registerUser = async (email, phone, name, password) => {
 };
 
 export const loginUser = async (email, password) => {
-  const user = await userRepository.findByParam(email);
+  const user = await userRepository.findByEmail(email);
   if (
     !user ||
     !(await bcrypt.compare(password, user.passwordHash)) ||
