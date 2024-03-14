@@ -17,6 +17,7 @@ await mongoose
   .connect(process.env.DB_CONNECT)
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB error", err));
+
 app.register(cookie);
 app.register(cors, { credentials: true, origin: process.env.CLIENT_URL });
 

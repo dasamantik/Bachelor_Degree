@@ -38,3 +38,24 @@ export const addProductToStock = async (request, reply) => {
     reply.send(`Помилка при cтворенні товару: ${err}`);
   }
 };
+
+export const deleteProductFromStock = async (request, reply) => {
+  try {
+    const { category, id } = request.params;
+    const removedProduct = await AdminService.DeleteProduct(id, category);
+    reply.send(`Товар ${removedProduct.model} успішно видалено.`);
+  } catch (err) {
+    reply.send(`Не вдалося видалити товар через помилку: ${err}`);
+  }
+};
+
+export const updateProductFromStock = async (request, reply) => {
+  try {
+    const id = request.params.id;
+    const productData = request.body;
+    const Updated = await AdminService.UpdateProduct(id, productData);
+    reply.send(`Товар ${Updated}  успішно оновлено.`);
+  } catch (err) {
+    reply.send(`Не вдалося оновити продукт, через помилку: ${err}`);
+  }
+};

@@ -2,9 +2,11 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import UserDto from "../DateTransferObj/userDTO.js";
 import AppiError from "../exceptions/appi-errors.js";
-import userRepository from "../repository/userRepo.js";
+import UserRepository from "../repository/userRepo.js";
 import MailService from "../service/mail-service.js";
 import * as Token from "../service/token-service.js";
+
+const userRepo = new UserRepository();
 
 const generateTokensPair = async (user) => {
   const userDTO = new UserDto(user);
@@ -13,8 +15,8 @@ const generateTokensPair = async (user) => {
   return { ...tokens, user: userDTO };
 };
 
-export const registerUser = async (email, phone, name, password) => {
-  const InUse = await userRepository.findByEmail(email);
+export const userRegistration = async (email, phone, name, password) => {
+  const InUse = await userRepo.findBy({ email });
   if (InUse) {
     throw AppiError.BadRequest(
       `Електронна адреса ${email} вже використовується`
@@ -23,7 +25,7 @@ export const registerUser = async (email, phone, name, password) => {
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
   const activationLink = uuidv4();
-  const user = await userRepository.create(
+  const user = await userRepo.create(
     email,
     passwordHash,
     phone,
@@ -40,7 +42,7 @@ export const registerUser = async (email, phone, name, password) => {
 };
 
 export const loginUser = async (email, password) => {
-  const user = await userRepository.findByEmail(email);
+  const user = await userRepo.findBy({ email });
   if (
     !user ||
     !(await bcrypt.compare(password, user.passwordHash)) ||
@@ -53,7 +55,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const activateAccount = async (activationLink) => {
-  const user = await userRepository.findByParam(activationLink);
+  const user = await userRepo.findByParam(activationLink);
   if (!user) {
     throw AppiError.BadRequest("Некоректне посиляння");
   }
@@ -75,7 +77,7 @@ export const refresh = async (refreshToken) => {
   if (!userData || tokenFromDb) {
     throw AppiError.UnauthorizedError();
   }
-  const user = await userRepository.findById(userData.id);
+  const user = await userRepo.findById(userData.id);
   const data = generateTokensPair(user);
   return data;
 };

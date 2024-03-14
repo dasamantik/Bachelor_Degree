@@ -17,4 +17,7 @@ export default class AppiError extends Error {
   static InvalidToken() {
     return new AppiError(403, "Токен не валідний");
   }
+  static NotFound(message) {
+    return new AppiError(404, message);
+  }
 }
