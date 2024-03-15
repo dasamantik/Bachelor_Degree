@@ -8,10 +8,16 @@ export default class AppiError extends Error {
   }
 
   static UnauthorizedError() {
-    return new AppiError(401, 'Користувач не авторизований');
+    return new AppiError(401, "Користувач не авторизований");
   }
 
   static BadRequest(message, errors = []) {
     return new AppiError(400, message, errors);
+  }
+  static InvalidToken() {
+    return new AppiError(403, "Токен не валідний");
+  }
+  static NotFound(message) {
+    return new AppiError(404, message);
   }
 }

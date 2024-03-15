@@ -2,9 +2,11 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import UserDto from '../DateTransferObj/userDTO.js';
 import AppiError from '../exceptions/appi-errors.js';
-import User from '../models/userModel.js';
+import UserRepository from '../repository/userRepo.js';
 import MailService from '../service/mail-service.js';
 import * as Token from '../service/token-service.js';
+
+const userRepo = new UserRepository();
 
 const generateTokensPair = async (user) => {
   const userDTO = new UserDto(user);
@@ -13,31 +15,23 @@ const generateTokensPair = async (user) => {
   return { ...tokens, user: userDTO };
 };
 
-export const registerUser = async (email, phone, name, password) => {
-  const InUse = await User.findOne({ email }, { _id: true });
+export const userRegistration = async (email, phone, name, password) => {
+  const InUse = await userRepo.findBy({ email });
   if (InUse) {
     throw AppiError.BadRequest(`Електронна адреса ${email} вже використовується`);
   }
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
   const activationLink = uuidv4();
-  const newUser = {
-    email,
-    passwordHash,
-    phone,
-    name,
-    activationLink,
-  };
-
-  const user = await User.create(newUser);
+  const user = await userRepo.create(email, passwordHash, phone, name, activationLink);
   const mailService = new MailService();
-  await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
+  await mailService.sendActivationMail(email, `${process.env.API_URL}/activate/${activationLink}`);
   const data = generateTokensPair(user);
   return data;
 };
 
 export const loginUser = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await userRepo.findBy({ email });
   if (!user || !(await bcrypt.compare(password, user.passwordHash)) || user.isActivated === false) {
     throw AppiError.UnauthorizedError();
   }
@@ -46,7 +40,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const activateAccount = async (activationLink) => {
-  const user = await User.findOne({ activationLink });
+  const user = await userRepo.findByParam(activationLink);
   if (!user) {
     throw AppiError.BadRequest('Некоректне посиляння');
   }
@@ -68,7 +62,7 @@ export const refresh = async (refreshToken) => {
   if (!userData || tokenFromDb) {
     throw AppiError.UnauthorizedError();
   }
-  const user = await User.findById(userData.id);
+  const user = await userRepo.findById(userData.id);
   const data = generateTokensPair(user);
   return data;
 };
