@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import AuthService from "../../service/authService";
-import "./login-register.css";
+import React, { useState } from 'react';
+import AuthService from '../../service/authService';
+import './login-register.css';
 
 function RegisterP() {
   const authService = new AuthService();
-  const [name, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   return (
     <div className="App">
       <div className="container">
@@ -66,7 +66,7 @@ function RegisterP() {
           </button>
         </form>
         <p className="label-style">
-          Вже маєте акаунт?{" "}
+          Вже маєте акаунт?{' '}
           <a className="link-style" href="/login">
             Увійти
           </a>

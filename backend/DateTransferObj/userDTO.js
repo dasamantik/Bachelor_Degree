@@ -4,9 +4,6 @@ export default class UserDto {
   isActivated;
   role;
   constructor(model) {
-    (this.email = model.email),
-      (this.id = model._id),
-      (this.isActivated = model.isActive),
-      (this.role = model.role);
+    (this.email = model.email), (this.id = model._id), (this.isActivated = model.isActivated), (this.role = model.role);
   }
 }

@@ -6,6 +6,7 @@ export default class AuthService {
     email: string,
     isActivated: boolean,
     id: string,
+    role: string,
   };
   isAuth = false;
 
@@ -23,8 +24,10 @@ export default class AuthService {
       console.log(response);
       this.isAuth = true;
       this.user = response.data.user;
+      return this.user;
     } catch (err) {
       console.log(err.response?.data?.message);
+      return false;
     }
   }
   async register(username, phone, email, password) {

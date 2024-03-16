@@ -1,15 +1,40 @@
+import { Alert, AlertTitle } from '@mui/material'; // Import Alert and AlertTitle
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import AuthService from '../../service/authService';
 
 function LoginP() {
   const authService = new AuthService();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const isAuthenticated = await authService.login(email, password);
+      if (isAuthenticated.role === 'admin' && isAuthenticated.isActivated === true) {
+        navigate('/admin');
+      } else if (isAuthenticated.role === 'user' && isAuthenticated.isActivated === true) {
+        navigate('/');
+      } else {
+        setShowAlert(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="App">
       <div className="container">
         <h1>Вхід</h1>
+        {showAlert && (
+          <Alert severity="warning">
+            <AlertTitle>Warning</AlertTitle>
+            Incorrect login or password
+          </Alert>
+        )}
         <form className="form-container">
           <label className="label-style" htmlFor="username">
             Електронна адреса:
@@ -33,7 +58,7 @@ function LoginP() {
             id="password"
             name="password"
           />
-          <button className="button-style" type="button" onClick={() => authService.login(email, password)}>
+          <button className="button-style" type="button" onClick={handleLogin}>
             Увійти
           </button>
         </form>
