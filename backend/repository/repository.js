@@ -20,7 +20,7 @@ class BaseRepository {
   }
 
   async getAll(options = {}) {
-    return await this.model.findAll(options);
+    return await this.model.find(options);
   }
 }
 

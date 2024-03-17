@@ -1,4 +1,4 @@
-import model from "../DateTransferObj/modelsDTO.js";
+import model from '../DateTransferObj/modelsDTO.js';
 
 const productRepo = {
   create: async (category, data) => {
@@ -9,6 +9,9 @@ const productRepo = {
   },
   update: async (category, id, data) => {
     return await model[category].findByIdAndUpdate(id, data, { new: true });
+  },
+  getAll: async (category) => {
+    return await model[category].find();
   },
 };
 

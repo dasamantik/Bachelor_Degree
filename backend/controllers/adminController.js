@@ -1,4 +1,4 @@
-import * as AdminService from "../service/admin-service.js";
+import * as AdminService from '../service/admin-service.js';
 
 export const getUsers = async (request, reply) => {
   try {
@@ -58,4 +58,10 @@ export const updateProductFromStock = async (request, reply) => {
   } catch (err) {
     reply.send(`Не вдалося оновити продукт, через помилку: ${err}`);
   }
+};
+
+export const getAllProducts = async (request, reply) => {
+  const category = request.params.category;
+  const products = await AdminService.getAllProducts(category);
+  return reply.send(products);
 };

@@ -1,7 +1,7 @@
-import models from "../DateTransferObj/modelsDTO.js";
-import AppiError from "../exceptions/appi-errors.js";
-import productRepo from "../repository/productRepo.js";
-import UserRepository from "../repository/userRepo.js";
+import models from '../DateTransferObj/modelsDTO.js';
+import AppiError from '../exceptions/appi-errors.js';
+import productRepo from '../repository/productRepo.js';
+import UserRepository from '../repository/userRepo.js';
 const userRepo = new UserRepository();
 export const getAllUsers = async () => {
   const users = await userRepo.getAll();
@@ -31,7 +31,7 @@ export const CreateProduct = async (data) => {
 export const DeleteProduct = async (prodId, category) => {
   const isDeleted = await productRepo.remove(category, prodId);
   if (!isDeleted) {
-    throw AppiError.NotFound("Такого продукту нема");
+    throw AppiError.NotFound('Такого продукту нема');
   }
   return isDeleted;
 };
@@ -40,7 +40,15 @@ export const UpdateProduct = async (prodId, data) => {
   const { category, ...cleanData } = data;
   const UpdatedProduct = await productRepo.update(category, prodId, cleanData);
   if (!UpdateProduct) {
-    throw AppiError.NotFound("Такого продукту нема");
+    throw AppiError.NotFound('Такого продукту нема');
   }
   return UpdatedProduct;
+};
+
+export const getAllProducts = async (category) => {
+  const productsFromCategory = await productRepo.getAll(category);
+  if (!productsFromCategory) {
+    throw AppiError.NotFound('Не вдалося отримати товари з категорії');
+  }
+  return productsFromCategory;
 };

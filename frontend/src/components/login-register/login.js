@@ -1,6 +1,6 @@
-import { Alert, AlertTitle } from '@mui/material'; // Import Alert and AlertTitle
+import { Alert, AlertTitle } from '@mui/material';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import AuthService from '../../service/authService';
 
 function LoginP() {

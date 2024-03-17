@@ -57,8 +57,8 @@ export const logout = async (request, reply) => {
 
 export const refreshToken = async (request, reply) => {
   try {
-    const { refreshToken: _refreshToken } = request.cookies;
-    const userData = await userService.refresh(_refreshToken);
+    const refreshToken = request.cookies.refreshToken;
+    const userData = await userService.refresh(refreshToken);
     reply.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
