@@ -7,7 +7,7 @@ export default function CPUpage() {
     <>
       <Box height={70} />
       <Box sx={{ display: 'flex' }}>
-        <Box component={'main'} sx={{ flexGrow: 1, p: 3 }}>
+        <Box sx={{ flexGrow: 1, padding: '4px' }}>
           <AppB />
         </Box>
         <StickyHeadTable />

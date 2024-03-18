@@ -161,9 +161,7 @@ export default function Sidenavig({ open, setOpen }) {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-      </Box>
+      <DrawerHeader />
     </>
   );
 }

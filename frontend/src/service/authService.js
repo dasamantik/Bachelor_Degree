@@ -21,7 +21,6 @@ export default class AuthService {
     try {
       const response = await authApi.loginApi(email, password);
       localStorage.setItem(`token`, response.data.accessToken);
-      console.log(response);
       this.isAuth = true;
       this.user = response.data.user;
       return this.user;

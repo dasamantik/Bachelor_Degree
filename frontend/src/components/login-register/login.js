@@ -10,7 +10,8 @@ function LoginP() {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       const isAuthenticated = await authService.login(email, password);
       if (isAuthenticated.role === 'admin' && isAuthenticated.isActivated === true) {
@@ -58,7 +59,7 @@ function LoginP() {
             id="password"
             name="password"
           />
-          <button className="button-style" type="button" onClick={handleLogin}>
+          <button className="button-style" onClick={handleLogin}>
             Увійти
           </button>
         </form>

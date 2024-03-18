@@ -9,6 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import AdminApi from '../../../../api/adminApi';
 
 const columns = [
   { id: 'brand', label: 'Brand', minWidth: 170 },
@@ -27,13 +28,8 @@ export default function StickyHeadTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://127.0.0.1:3002/api/admin/products/getAll/cpu', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
+        const response = await AdminApi.getAllProducts('cpu');
+        const data = await response.data;
         console.log(data);
         setRows(data);
       } catch (error) {
