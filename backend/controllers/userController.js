@@ -23,10 +23,12 @@ export const login = async (request, reply) => {
     if (error) return reply.status(400).json({ message: `Помилка валідації: ${error.details[0].message}` });
     const { email, password } = request.body;
     const userData = await userService.loginUser(email, password);
-    reply.cookie('refreshToken', userData.refreshToken, {
+
+    const stat = reply.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
+    console.log(stat);
     reply.send(userData);
   } catch (err) {
     reply.send(err);
