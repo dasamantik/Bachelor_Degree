@@ -1,10 +1,11 @@
+import { Home } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Toolbar, Typography } from '@mui/material';
+import { Toolbar, Tooltip, Typography } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../service/appStore';
 const drawerWidth = 280;
 const AppBar = styled(MuiAppBar, {
@@ -28,6 +29,7 @@ const AppBar = styled(MuiAppBar, {
 export default function DenseAppBar() {
   const updateOpen = useAppStore((state) => state.updateOpen);
   const dopen = useAppStore((state) => state.dopen);
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -36,6 +38,11 @@ export default function DenseAppBar() {
           <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={() => updateOpen(!dopen)}>
             <MenuIcon />
           </IconButton>
+          <Tooltip title="Повернутися на основну сторінку">
+            <IconButton sx={{ mr: 1 }} onClick={() => navigate('/admin')}>
+              <Home />
+            </IconButton>
+          </Tooltip>
           <Typography variant="h6" color="inherit" component="div">
             Адмін панель сайту PC-config
           </Typography>
