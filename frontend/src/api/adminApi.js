@@ -7,4 +7,7 @@ export default class AdminApi {
   static async deleteProduct(category, id) {
     return $api.delete(`/admin/products/delete/${category}/${id}`);
   }
+  static async createProduct(category, data) {
+    return $api.post(`/admin/products/add/${category}`, data);
+  }
 }
